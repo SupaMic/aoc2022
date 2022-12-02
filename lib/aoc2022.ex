@@ -1,18 +1,25 @@
 defmodule Aoc2022 do
   @moduledoc """
-  Documentation for `Aoc2022`.
+  `Aoc2022` is a module for Advent of Code 2022.
   """
+  def input(filename) do
+    {:ok, file} = File.read("lib/" <> filename <> ".txt")
+    file
+  end
 
-  @doc """
-  Hello world.
+  def input_to_list(input) do
+    input
+    |> String.split(",")
+    |> Stream.map(&String.to_integer(&1))
+    |> Enum.to_list()
 
-  ## Examples
+    # |> IO.inspect(label: "input list")
+  end
 
-      iex> Aoc2022.hello()
-      :world
+  def input_lines_to_list(input) do
+    input
+    |> String.split(~r/\n/, trim: true)
 
-  """
-  def hello do
-    :world
+    # |> IO.inspect(label: "input list")
   end
 end
