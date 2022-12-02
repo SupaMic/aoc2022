@@ -18,7 +18,7 @@ defmodule Aoc2022 do
 
   def input_lines_to_list(input) do
     input
-    |> String.split(~r/\n/, trim: true)
+    |> String.split(~r/\r\n/, trim: true)
 
     # |> IO.inspect(label: "input list")
   end
