@@ -1,6 +1,6 @@
 defmodule Aoc2022.Day2 do
   @moduledoc """
-  `Aoc2022.Day1` is a module for Advent of Code 2022, day 1.
+  Advent of Code 2022, day 2.
   """
   import Aoc2022
 

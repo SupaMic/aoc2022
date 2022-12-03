@@ -90,7 +90,7 @@ Both parts of this puzzle are complete! They provide two gold stars: **
 
   def input_to_groups(input) do
     input
-    |> String.split(~r/\r\n\r\n/, trim: true)
+    |> String.split(~r/\n\n/, trim: true)
   end
 
   def sum_groups_with_index(groups) do
@@ -102,7 +102,7 @@ Both parts of this puzzle are complete! They provide two gold stars: **
 
   def sum_group(group) do
     group
-    |> String.split(~r/\r\n/, trim: true)
+    |> String.split(~r/\n/, trim: true)
     |> Stream.map(&String.to_integer(&1))
     |> Enum.sum()
   end
