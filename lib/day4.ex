@@ -41,6 +41,24 @@ import Aoc2022
 
   end
 
+  def part2(input) do
+    data(input)
+    |> input_lines_to_list()
+    |> Enum.reduce(0, fn sectors, acc ->
+          [sector_a, sector_b] = String.split(sectors, ",", trim: true)
+                    |> Enum.map(&sector_mapset/1)
+                    #|> IO.inspect(label: "sector_pair")
+
+          intersection = MapSet.intersection(sector_a, sector_b)
+                         # |> IO.inspect(label: "intersection")
+
+          cond do
+            MapSet.size(intersection) > 0 -> acc + 1
+            true -> acc
+          end
+        end)
+  end
+
   def sector_mapset(sector) do
     [a, b] = String.split(sector, "-", trim: true)
              |> Enum.map(&String.to_integer/1)
