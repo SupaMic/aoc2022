@@ -35,8 +35,37 @@ move 1 from 1 to 2
     |> Enum.reduce(state, fn instr, acc -> parse(instr, acc) end)
   end
 
-  def part2 do
+  def part2(input) do
+    [state, instructions] = data(input)|> String.split(~r/\n\n/, trim: false)
 
+    state = transform_state(state)
+    |> IO.inspect(label: "state end")
+
+    instructions
+    |> input_lines_to_list()
+    |> Enum.reduce(state, fn instr, acc -> parse2(instr, acc) end)
+  end
+
+  def parse2(instruction, state) do
+    list = instruction
+    |> String.split(" ")
+    |> IO.inspect(label: "instruction")
+
+    {count, _} = List.pop_at(list, 1)
+    {from, _} = List.pop_at(list, 3)
+    {to, _} = List.pop_at(list, 5)
+
+    move2(state, String.to_integer(from), String.to_integer(to), String.to_integer(count) )
+  end
+
+  def move2(state, from_stack, to_stack, count) do
+      crates = state[from_stack]
+      |> Enum.take(count)
+
+
+      {_, new_state} = Map.get_and_update(state, from_stack, &({&1, Enum.drop(&1, count)}))
+      {_, newer_state} = Map.get_and_update(new_state, to_stack, &({&1, List.flatten(List.insert_at(&1, 0, crates))}))
+      newer_state |> IO.inspect(label: "new_state")
   end
 
   def parse(instruction, state) do
