@@ -35,6 +35,10 @@ move 1 from 1 to 2
     |> Enum.reduce(state, fn instr, acc -> parse(instr, acc) end)
   end
 
+  def part2 do
+
+  end
+
   def parse(instruction, state) do
     list = instruction
     |> String.split(" ")
