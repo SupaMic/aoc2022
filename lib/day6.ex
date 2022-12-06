@@ -30,4 +30,24 @@ defmodule Aoc2022.Day6 do
               scan(Enum.join(tail), count+1)
     end
   end
+
+  def part2(input) do
+    data(input)
+    |> scan2(14)
+  end
+
+  def scan2(stream, count) do
+    unique_count = stream
+            |> String.codepoints()
+            |> Enum.take(14)
+            |> Enum.uniq
+            |> Enum.count
+
+    if unique_count < 14 do
+      [ _h | tail] = String.codepoints(stream)
+      scan2(Enum.join(tail), count+1)
+    else
+      count
+    end
+  end
 end
