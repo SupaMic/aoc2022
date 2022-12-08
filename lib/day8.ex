@@ -21,6 +21,54 @@ defmodule Aoc2022.Day8 do
     |> count_visible()
   end
 
+  def part2(input) do
+    data(input)
+    |> make_grid()
+    |> scenic_scores()
+    |> IO.inspect(label: "scenic score")
+    |> Enum.max()
+  end
+
+  def scenic_scores(grid) do
+    {edge_row, edge_col} = grid_edges(grid)
+    Enum.reduce(grid, [], fn tree = {{row, col}, height}, acc ->
+      cond do
+        row == 0 or col == 0 or row == edge_row or col == edge_col -> acc
+        #height < 5 -> acc
+        true -> [scenic_score(grid, tree) | acc]
+      end
+    end)
+  end
+
+  def tally(list, height, _direction) do
+    list
+    |> Enum.split_while(&(&1 < height))
+    |> then(fn {shorter, []} -> shorter
+               {shorter, [h | _rest]} -> shorter ++ [h]
+              end )
+    |> Enum.count()
+  end
+
+  def scenic_score(grid, _tree = {{row, col}, height}) do
+    {edge_row, edge_col} = grid_edges(grid)
+    IO.inspect({row, col}, label: "\n\nheight: #{height}")
+
+    north = for rows <- (row-1)..0 do Map.get(grid, {rows, col}) end
+            |> tally(height, "north")
+
+    south = for rows <- (row+1)..edge_row do Map.get(grid, {rows, col}) end
+            |> tally(height, "south")
+
+    east = for cols <- (col+1)..edge_col do Map.get(grid, {row, cols}) end
+            |> tally(height, "east")
+
+    west = for cols <- (col-1)..0 do Map.get(grid, {row, cols}) end
+            |> tally(height, "west")
+
+    IO.inspect({north, west, east, south}, label: "directions")
+    north * west * east * south
+  end
+
   def make_grid(input) do
     input
     |> String.split(~r/\n/, trim: true)
