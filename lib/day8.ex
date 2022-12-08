@@ -22,11 +22,12 @@ defmodule Aoc2022.Day8 do
   end
 
   def part2(input) do
-    data(input)
-    |> make_grid()
-    |> scenic_scores()
-    |> IO.inspect(label: "scenic score")
-    |> Enum.max()
+    :timer.tc(fn ->
+        data(input)
+        |> make_grid()
+        |> scenic_scores()
+        |> Enum.max()
+    end)
   end
 
   def scenic_scores(grid) do
@@ -34,7 +35,7 @@ defmodule Aoc2022.Day8 do
     Enum.reduce(grid, [], fn tree = {{row, col}, height}, acc ->
       cond do
         row == 0 or col == 0 or row == edge_row or col == edge_col -> acc
-        #height < 5 -> acc
+        #height < 7 -> acc
         true -> [scenic_score(grid, tree) | acc]
       end
     end)
@@ -51,7 +52,6 @@ defmodule Aoc2022.Day8 do
 
   def scenic_score(grid, _tree = {{row, col}, height}) do
     {edge_row, edge_col} = grid_edges(grid)
-    IO.inspect({row, col}, label: "\n\nheight: #{height}")
 
     north = for rows <- (row-1)..0 do Map.get(grid, {rows, col}) end
             |> tally(height, "north")
@@ -65,7 +65,6 @@ defmodule Aoc2022.Day8 do
     west = for cols <- (col-1)..0 do Map.get(grid, {row, cols}) end
             |> tally(height, "west")
 
-    IO.inspect({north, west, east, south}, label: "directions")
     north * west * east * south
   end
 
